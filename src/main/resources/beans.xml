@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 使用 Spring 来创建对象，这些都称为 Bean
+         类型 变量名 = new 类型()
+         Hello hello = new Hello()
+
+         id = 变量名
+         class = new 的对象
+         property = 给对象中的属性设置值
+    -->
+    <!--
+        IOC 控制反转
+        控制: 谁来控制对象的创建，传统应用程序的对象是由程序本身控制创建的，使用 Spring 后，对象是由 Spring 来创建的
+        反转: 程序本身不创建对象，而变成被动的接收对象
+        依赖注入: 利用 set() 来进行注入
+        IOC 是一种编程思想，由主动的编程编程被动的接收
+    -->
+    <bean id="hello" class="com.spring.pojo.Hello">
+        <property name="title" value="World"/>
+    </bean>
+
+    <!--
+        value: 具体的值，基本数据类型
+        ref: 引用 Spring 容器中创建好的对象
+    -->
+    <bean id = "mysqlImpl" class="com.spring.dao.UserDaoMysqlImpl"/>
+    <bean id="userServiceImpl" class="com.spring.service.UserServiceImpl">
+        <property name="userDao" ref="mysqlImpl"/>
+    </bean>
+
+    <!-- 默认使用无参构造创建对象 -->
+<!--    <bean id="user" class="com.spring.pojo.User"/>-->
+
+    <!-- 有参构造使用下列三种方式 -->
+<!--    <bean id="user" class="com.spring.pojo.User">-->
+<!--        <constructor-arg index="0" value="下标赋值"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="user" class="com.spring.pojo.User">-->
+<!--        <constructor-arg type="java.lang.String" value="类型赋值，不推荐"/>-->
+<!--    </bean>-->
+
+    <bean id="user" class="com.spring.pojo.User">
+        <constructor-arg name="name" value="参数名赋值"/>
+    </bean>
+
+</beans>
