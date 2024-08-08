@@ -7,8 +7,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class UserTest {
     @Test
     public void myTest() {
-        ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         User user = (User) context.getBean("user");
+//        User user = (User) context.getBean("userT");
+//        User user = (User) context.getBean("user_alias");
         System.out.println(user.toString());
     }
 }

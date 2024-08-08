@@ -43,7 +43,16 @@
 <!--        <constructor-arg type="java.lang.String" value="类型赋值，不推荐"/>-->
 <!--    </bean>-->
 
-    <bean id="user" class="com.spring.pojo.User">
+    <!--
+        id 是 bean 的唯一标识符，如果没有配置 id，那么 name 就是默认标识符
+        如果配置了 id，又配置了 name，那么 name 是别名
+        name 可以设置多个别名，可以用逗号、分好、空格隔开
+        如果不配置 id 和 name，可以根据 applicationContext.getBean(.class) 获取对象
+        class 是 bean 的全限定名 = 包名 + 类名
+    -->
+    <!-- 设置别名: 在获取 bean 的时候可以使用别名获取 -->
+    <alias name="user" alias="userT"/>
+    <bean id="user" name="user_alias user_alias2,user_alias3;user_alias4" class="com.spring.pojo.User">
         <constructor-arg name="name" value="参数名赋值"/>
     </bean>
 
