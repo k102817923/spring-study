@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- set 注入 -->
+
+    <bean id="address" class="com.spring.pojo.Address">
+        <property name="address" value="深圳"/>
+    </bean>
+
+    <bean id="student" class="com.spring.pojo.Student">
+        <!-- 常量注入 -->
+        <property name="name" value="knan"/>
+        <!-- bean 注入 -->
+        <property name="address" ref="address"/>
+        <!-- 数组注入 -->
+        <property name="books">
+            <array>
+                <value>深入浅出 Node.js</value>
+                <value>高性能 MySQL</value>
+                <value>图解算法</value>
+            </array>
+        </property>
+        <!-- List 注入 -->
+        <property name="hobbys">
+            <list>
+                <value>咖啡</value>
+                <value>音乐</value>
+                <value>编程</value>
+            </list>
+        </property>
+        <!-- Map 注入 -->
+        <property name="card">
+            <map>
+                <entry key="Java" value="70"/>
+                <entry key="Node.js" value="80"/>
+                <entry key="MySQL" value="90"/>
+            </map>
+        </property>
+        <!-- Set 注入 -->
+        <property name="games">
+            <set>
+                <value>GTR</value>
+                <value>Three Kingdoms</value>
+            </set>
+        </property>
+        <!-- Null 注入 -->
+        <property name="wife">
+            <null/>
+        </property>
+        <!-- Properties 注入 -->
+        <property name="info">
+            <props>
+                <prop key="性别">男</prop>
+                <prop key="身高">180</prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

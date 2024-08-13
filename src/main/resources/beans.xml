@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:p ="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+>
 
     <!-- 使用 Spring 来创建对象，这些都称为 Bean
          类型 变量名 = new 类型()
@@ -51,9 +54,50 @@
         class 是 bean 的全限定名 = 包名 + 类名
     -->
     <!-- 设置别名: 在获取 bean 的时候可以使用别名获取 -->
-    <alias name="user" alias="userT"/>
-    <bean id="user" name="user_alias user_alias2,user_alias3;user_alias4" class="com.spring.pojo.User">
-        <constructor-arg name="name" value="参数名赋值"/>
+<!--    <alias name="user" alias="userT"/>-->
+<!--    <bean id="user" name="user_alias user_alias2,user_alias3;user_alias4" class="com.spring.pojo.User">-->
+<!--        <constructor-arg name="name" value="参数名赋值"/>-->
+<!--    </bean>-->
+
+    <!--
+        P 命名空间注入：需要在头文件中加入约束文件sc
+        P(属性：properties)命名空间，属性依然要设置 set 方法
+    -->
+<!--    <bean id="user" class="com.spring.pojo.User" p:name="P 命名空间注入"/>-->
+
+    <!--
+        C 命名空间注入：需要在头文件中加入约束文件
+        C(构造：Constructor)命名空间，属性依然要设置 set 方法
+        需要设置有参构造
+    -->
+<!--    <bean id="user" class="com.spring.pojo.User" c:name="C 命名空间注入"/>-->
+
+    <!--
+        Bean 作用域
+        在 Spring 中，那些组成应用程序的主体及由 Spring IOC 容器所管理的对象，都称之为 Bean，即 Bean 就是由 IOC 容器初始化、装配、管理的对象
+        Singleton：在 Spring IOC 容器中仅存在一个 Bean 实例，Bean 以单例模式存在，默认值
+        prototype：每次从容器中调用 Bean 时，都返回一个新实例，即每次调用 getBean() 时相当于执行 new xxxBean()
+        request：每次 HTTP 请求都会创建一个 Bean，该作用域仅适用于 WebApplicationContext 环境
+        session：同一个 HTTP Session 共享一个 Bean，不同 Session 使用不同 Bean，仅适用于 WebApplicationContext 环境
+    -->
+
+    <bean id="cat" class="com.spring.pojo.Cat"/>
+    <bean id="dog" class="com.spring.pojo.Dog"/>
+
+    <!--
+        当一个 bean 节点带有 autowire byName 属性时，将查找其类中所有的 set 方法，例如 setCat()，匹配将 set 去除并设置首字母小写的字符串，即 cat
+        Spring 容器中如果存在此字符串名称 ID 的对象，则取出并注入，如果不存在则报空指针异常
+    -->
+<!--    <bean id="user" class="com.spring.pojo.User" autowire="byName">-->
+<!--        <property name="name" value="Bean 的按名称自动装配"/>-->
+<!--    </bean>-->
+
+    <!--
+        同一类型的对象，在 Spring 容器中需保证唯一，否则会报错 NoUniqueBeanDefinitionException
+        按类型匹配，bean 的名称写错或者 ID 属性去除也不影响
+    -->
+    <bean id="user" class="com.spring.pojo.User" autowire="byType">
+        <property name="name" value="Bean 的按类型自动装配"/>
     </bean>
 
 </beans>
