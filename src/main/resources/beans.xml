@@ -86,13 +86,19 @@
     -->
 <!--    <bean id="user" class="com.spring.pojo.User" scope="singleton"/>-->
 
-    <bean id="cat" class="com.spring.pojo.Cat"/>
-    <bean id="dog" class="com.spring.pojo.Dog"/>
-    <bean id="dog2" class="com.spring.pojo.Dog"/>
-    <bean id="user" class="com.spring.pojo.User"/>
+
 
     <!-- 开启注解支持 -->
     <context:annotation-config/>
+
+    <!-- 配置扫描哪些包下的注解 -->
+    <!--
+        为了更好的分层，Spring 可以使用其他三个注解，功能一样，写上这些注解，即将这个类交给 Spring 管理装配
+        @Controller：web 层
+        @Service：service 层
+        @Repository：dao 层
+    -->
+    <context:component-scan base-package="com.spring"/>
 
     <!--
         当一个 bean 节点带有 autowire byName 属性时，将查找其类中所有的 set 方法，例如 setCat()，匹配将 set 去除并设置首字母小写的字符串，即 cat
