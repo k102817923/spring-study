@@ -1,14 +1,8 @@
 package com.spring.pojo;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import javax.swing.*;
 
 // 等价于 <bean id="user" class="当前类"/>
 @Component("user")
