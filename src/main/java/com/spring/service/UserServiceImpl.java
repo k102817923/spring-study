@@ -15,4 +15,9 @@ public class UserServiceImpl implements UserService {
     public void getUser() {
         userDao.getUser();
     }
+
+    @Override
+    public void add() {
+        System.out.println("添加用户");
+    }
 }

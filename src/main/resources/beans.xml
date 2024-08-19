@@ -3,11 +3,14 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p ="http://www.springframework.org/schema/p"
        xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        https://www.springframework.org/schema/context/spring-context.xsd"
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd"
 >
 
     <!-- 使用 Spring 来创建对象，这些都称为 Bean
@@ -37,6 +40,14 @@
     <bean id="userServiceImpl" class="com.spring.service.UserServiceImpl">
         <property name="userDao" ref="mysqlImpl"/>
     </bean>
+
+    <bean id="beforeLog" class="com.spring.log.BeforeLog"/>
+    <bean id="afterLog" class="com.spring.log.AfterLog"/>
+    <aop:config>
+        <aop:pointcut id="pointcut" expression="execution(* com.spring.service.UserServiceImpl.*(..))"/>
+        <aop:advisor advice-ref="beforeLog" pointcut-ref="pointcut"/>
+        <aop:advisor advice-ref="afterLog" pointcut-ref="pointcut"/>
+    </aop:config>
 
     <!-- 默认使用无参构造创建对象 -->
 <!--    <bean id="user" class="com.spring.pojo.User"/>-->

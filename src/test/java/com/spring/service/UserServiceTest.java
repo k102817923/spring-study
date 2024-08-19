@@ -15,4 +15,11 @@ public class UserServiceTest {
         UserServiceImpl userService = (UserServiceImpl) context.getBean("userServiceImpl");
         userService.getUser();
     }
+
+    @Test
+    public void myTest() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+        UserService userService = (UserService) context.getBean("userServiceImpl");
+        userService.add();
+    }
 }
