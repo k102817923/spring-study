@@ -8,4 +8,13 @@
     <select id="getList" resultType="Admin">
         select * from admin
     </select>
+
+    <insert id="insert" parameterType="Admin">
+        insert into admin (id, name, pwd) values (#{id}, #{name}, #{pwd})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        # 故意写错以测试事务
+        deletes from admin where id = #{id}
+    </delete>
 </mapper>

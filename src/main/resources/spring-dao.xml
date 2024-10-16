@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- DataSource 使用 Spring 的数据源替换 Mybatis 的配置，这里使用 Spring 提供的 JDBC -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/mybatis?useSSL=true&amp;useUnicode=true&amp;characterEncoding=utf8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+    </bean>
+
+    <!-- sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 绑定 Mybatis 配置文件 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath*:com/spring/mapper/*.xml"/>
+    </bean>
+
+    <!-- sqlSessionTemplate 就是 Mybatis 中使用的 sqlSession -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <!-- 只能通过构造器注入 sqlSessionFactory 因为没有 set() 方法 -->
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+
+<!--    <bean id="adminMapperImpl" class="com.spring.mapper.AdminMapperImpl">-->
+<!--        <property name="sqlSessionTemplate" ref="sqlSessionTemplate"/>-->
+<!--    </bean>-->
+
+    <bean id="adminMapperImpl" class="com.spring.mapper.AdminMapperImpl">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 配置声明式事务 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 通过构造器 -->
+<!--        <constructor-arg ref="dataSource" />-->
+        <!-- 通过属性 -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 结合 AOP 实现事务的织入 -->
+    <!-- 配置事务通知 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 配置哪些方法使用什么样的事务，配置事务的传播特性（默认 REQUIRED） -->
+        <!--
+            Spring 支持 7 种事务传播行为
+            propagation_requierd：如果当前没有事务，就新建一个事务，如果已存在一个事务中，加入到这个事务中，这是最常见的选择
+            propagation_supports：支持当前事务，如果没有当前事务，就以非事务方法执行
+            propagation_mandatory：使用当前事务，如果没有当前事务，就抛出异常
+            propagation_required_new：新建事务，如果当前存在事务，把当前事务挂起
+            propagation_not_supported：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起
+            propagation_never：以非事务方式执行操作，如果当前事务存在则抛出异常
+            propagation_nested：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与 propagation_required 类似的操作
+            Spring 默认的事务传播行为是 PROPAGATION_REQUIRED，它适合于绝大多数的情况
+        -->
+        <tx:attributes>
+            <tx:method name="add" propagation="REQUIRED"/>
+            <tx:method name="delete" propagation="REQUIRED"/>
+            <tx:method name="update" propagation="REQUIRED"/>
+            <tx:method name="query" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 配置事务切入 -->
+    <aop:config>
+        <aop:pointcut id="txPointCut" expression="execution(* com.spring.mapper.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>
+    </aop:config>
+</beans>
